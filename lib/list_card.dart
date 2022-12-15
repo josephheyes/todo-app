@@ -1,4 +1,4 @@
-import 'package:dristle/new_event.dart';
+import 'package:dristle/manage_event.dart';
 import 'package:flutter/material.dart';
 import 'event.dart';
 
@@ -18,8 +18,10 @@ class _ListCardState extends State<ListCard> {
         child: Padding(
       padding: const EdgeInsets.all(20),
       child: ListTile(
-        leading: IconButton(
-          icon: Icon(widget.event.category.icon, color: Colors.green),
+        leading: Icon(widget.event.category.icon, color: Colors.green),
+        title: Text(widget.event.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.arrow_forward_rounded),
           onPressed: (() async {
             await Navigator.push(
               context,
@@ -30,8 +32,6 @@ class _ListCardState extends State<ListCard> {
             setState(() {});
           }),
         ),
-        title: Text(widget.event.name),
-        trailing: const Icon(Icons.arrow_forward_rounded),
       ),
     ));
   }

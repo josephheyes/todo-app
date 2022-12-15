@@ -1,6 +1,7 @@
 import 'package:dristle/event.dart';
+import 'package:dristle/list.dart';
 import 'package:dristle/list_card.dart';
-import 'package:dristle/new_event.dart';
+import 'package:dristle/manage_event.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,51 +20,58 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         useMaterial3: true,
       ),
-      home: MyHomePage(title: 'Dristle'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
-  final String title;
-  final List<Event> eventList = [];
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Column listColumn = Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [],
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: ListView.builder(
-        itemCount: widget.eventList.length,
-        itemBuilder: (context, index) {
-          return ListCard(
-            event: widget.eventList[index],
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NewEvent(eventList: widget.eventList),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              "Dristle",
+              textAlign: TextAlign.center,
+              textScaleFactor: 6,
+            ),
+            const Text(
+              "A To-Do List App",
+              textAlign: TextAlign.center,
+              textScaleFactor: 3,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 127, 206, 130)),
+                foregroundColor: MaterialStateProperty.all(Colors.black),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.fromLTRB(40, 0, 40, 0)),
               ),
-            );
-            setState(() {});
-          },
-          child: const Icon(Icons.add)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TodoList(),
+                  ),
+                );
+              },
+              child: const Text("List"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
