@@ -1,14 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'event.dart';
 
+class Category {
+  String name;
+  IconData icon;
+
+  Category(this.name, this.icon);
+}
+
 class NewEvent extends StatefulWidget {
-  const NewEvent({super.key});
+  final List<Event> eventList;
 
   @override
   NewEventState createState() {
     return NewEventState();
   }
+
+  const NewEvent({super.key, required this.eventList});
 }
 
 class NewEventState extends State<NewEvent> {
@@ -21,15 +29,26 @@ class NewEventState extends State<NewEvent> {
     super.dispose();
   }
 
-  var categories = [
-    "Chore",
-    "Work",
-    "Assignment",
-    "Health",
-    "Exercise",
-    "Social"
+  Future<void> addEvent(String text, Category category) async {
+    setState(() {
+      widget.eventList.add(
+        Event(name: text, category: category),
+      );
+
+      Navigator.pop(context);
+    });
+  }
+
+  final List<Category> _categories = [
+    Category("Chore", Icons.check),
+    Category("Work", Icons.work),
+    Category("Assignment", Icons.school),
+    Category("Health", Icons.health_and_safety),
+    Category("Exercise", Icons.fitness_center),
+    Category("Social", Icons.group)
   ];
-  String? _category;
+
+  Category? _category;
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +73,14 @@ class NewEventState extends State<NewEvent> {
                   },
                 ),
                 DropdownButtonFormField(
-                  items: categories.map((String category) {
-                    // ignore: unnecessary_new
-                    return new DropdownMenuItem(
+                  items: _categories.map((Category category) {
+                    return DropdownMenuItem(
                         value: category,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(Icons.star),
-                            Text(category),
+                            Text(category.name),
+                            Icon(category.icon),
                           ],
                         ));
                   }).toList(),
@@ -75,7 +94,7 @@ class NewEventState extends State<NewEvent> {
                       labelText: "Event type",
                       labelStyle: TextStyle(color: Colors.black)),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null) {
                       return 'Please enter a category';
                     }
                     return null;
@@ -83,21 +102,8 @@ class NewEventState extends State<NewEvent> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Event event =
-                            Event(name: textController.text, type: _category!);
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                  content: Column(
-                                children: [
-                                  Text(event.name),
-                                  Text(event.type),
-                                ],
-                              ));
-                            });
-                      }
+                      if (_formKey.currentState!.validate()) {}
+                      addEvent(textController.text, _category!);
                     },
                     child: const Text("Submit")),
               ],

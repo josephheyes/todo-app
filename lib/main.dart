@@ -1,5 +1,6 @@
-import 'package:dristle/listCard.dart';
-import 'package:dristle/newEvent.dart';
+import 'package:dristle/event.dart';
+import 'package:dristle/list_card.dart';
+import 'package:dristle/new_event.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,23 +15,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.green, useMaterial3: false),
-      home: const MyHomePage(title: 'Dristle'),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        useMaterial3: true,
+      ),
+      home: MyHomePage(title: 'Dristle'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+  MyHomePage({super.key, required this.title});
   final String title;
+  final List<Event> eventList = [];
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void createEvent() {}
+  Column listColumn = Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +45,24 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              ListCard(typeIcon: Icons.sticky_note_2, event: "Write report"),
-              ListCard(
-                  typeIcon: Icons.local_hospital, event: "Doctor's appointment")
-            ],
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: widget.eventList.length,
+        itemBuilder: (context, index) {
+          return ListCard(
+            typeIcon: widget.eventList[index].category.icon,
+            event: widget.eventList[index].name,
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NewEvent()),
+              MaterialPageRoute(
+                builder: (context) => NewEvent(eventList: widget.eventList),
+              ),
             );
+            setState(() {});
           },
           child: const Icon(Icons.add)),
     );

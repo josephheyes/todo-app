@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dristle/new_event.dart';
 
 class Event {
-  final String type;
-  final String name;
+  Category category;
+  String name;
 
-  const Event({required this.name, required this.type});
+  Event({required this.name, required this.category});
 }
