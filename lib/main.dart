@@ -49,8 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: widget.eventList.length,
         itemBuilder: (context, index) {
           return ListCard(
-            typeIcon: widget.eventList[index].category.icon,
-            event: widget.eventList[index].name,
+            event: widget.eventList[index],
           );
         },
       ),

@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'event.dart';
 
-class NewEvent extends StatefulWidget {
-  final List<Event>? eventList;
-  Event? event;
-  late String title;
+class EditEvent extends StatefulWidget {
+  final Event event;
 
   @override
-  NewEventState createState() {
-    return NewEventState();
+  EditEventState createState() {
+    return EditEventState();
   }
 
-  NewEvent({super.key, this.eventList, this.event}) {
-    if (eventList == null) {
-      title = "Edit Event";
-    } else {
-      title = "Create New Event";
-    }
-  }
+  const EditEvent({super.key, required this.event});
 }
 
-class NewEventState extends State<NewEvent> {
+class EditEventState extends State<EditEvent> {
   final _formKey = GlobalKey<FormState>();
   final textController = TextEditingController();
 
@@ -28,25 +20,6 @@ class NewEventState extends State<NewEvent> {
   void dispose() {
     textController.dispose();
     super.dispose();
-  }
-
-  Future<void> addEvent(String text, Category category) async {
-    setState(() {
-      widget.eventList!.add(
-        Event(name: text, category: category),
-      );
-
-      Navigator.pop(context);
-    });
-  }
-
-  Future<void> editEvent(String text, Category category) async {
-    setState(() {
-      widget.event!.name = text;
-      widget.event!.category = category;
-
-      Navigator.pop(context);
-    });
   }
 
   final List<Category> _categories = [
@@ -63,7 +36,7 @@ class NewEventState extends State<NewEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
+        appBar: AppBar(title: const Text("Create New Event")),
         body: Form(
             key: _formKey,
             child: Column(
@@ -112,13 +85,8 @@ class NewEventState extends State<NewEvent> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (widget.eventList == null && widget.event != null) {
-                          editEvent(textController.text, _category!);
-                        } else {
-                          addEvent(textController.text, _category!);
-                        }
-                      }
+                      if (_formKey.currentState!.validate()) {}
+                      addEvent(textController.text, _category!);
                     },
                     child: const Text("Submit")),
               ],
