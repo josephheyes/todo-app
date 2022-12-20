@@ -1,7 +1,5 @@
-import 'package:dristle/event.dart';
+import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
-import 'package:dristle/list_card.dart';
-import 'package:dristle/manage_event.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,10 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -35,42 +34,73 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Text(
-              "Dristle",
-              textAlign: TextAlign.center,
-              textScaleFactor: 6,
-            ),
-            const Text(
-              "A To-Do List App",
-              textAlign: TextAlign.center,
-              textScaleFactor: 3,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(255, 127, 206, 130)),
-                foregroundColor: MaterialStateProperty.all(Colors.black),
-                padding: MaterialStateProperty.all(
-                    const EdgeInsets.fromLTRB(40, 0, 40, 0)),
+    return Container(
+      color: Theme.of(context).colorScheme.secondary,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: (MediaQuery.of(context).size.height) * 0.8,
+              child: Card(
+                color: Theme.of(context).colorScheme.primary,
+                elevation: 15,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    BorderedText(
+                      strokeColor: Colors.black,
+                      child: Text(
+                        "Dristle",
+                        style: TextStyle(
+                            fontSize: 100,
+                            color: Theme.of(context).colorScheme.surface,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Roboto Serif'),
+                      ),
+                    ),
+                    Text(
+                      "A To-Do List App",
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Theme.of(context).colorScheme.surface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TodoList(),
-                  ),
-                );
-              },
-              child: const Text("List"),
             ),
-          ],
-        ),
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.inversePrimary),
+              foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.inverseSurface),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.fromLTRB(20, 0, 20, 0)),
+              elevation: MaterialStateProperty.all(15),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodoList(),
+                ),
+              );
+            },
+            child: const Text(
+              "Start planning!",
+              style: TextStyle(
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

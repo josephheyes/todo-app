@@ -14,7 +14,7 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   Column listColumn = Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [],
+    children: const [],
   );
 
   @override
@@ -22,6 +22,8 @@ class _TodoListState extends State<TodoList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("To-do List"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: ListView.builder(
         itemCount: widget.eventList.length,
@@ -32,6 +34,7 @@ class _TodoListState extends State<TodoList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () async {
             await Navigator.push(
               context,

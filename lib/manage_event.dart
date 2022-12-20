@@ -3,8 +3,8 @@ import 'event.dart';
 
 class NewEvent extends StatefulWidget {
   final List<Event>? eventList;
-  Event? event;
-  late String title;
+  final Event? event;
+  late final String title;
 
   @override
   NewEventState createState() {
@@ -63,7 +63,11 @@ class NewEventState extends State<NewEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
+        appBar: AppBar(
+          title: Text(widget.title),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.surface,
+        ),
         body: Form(
             key: _formKey,
             child: Column(
@@ -111,6 +115,15 @@ class NewEventState extends State<NewEvent> {
                   },
                 ),
                 ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.inversePrimary),
+                      foregroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.inverseSurface),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.fromLTRB(42, 0, 42, 0)),
+                      elevation: MaterialStateProperty.all(5),
+                    ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         if (widget.eventList == null && widget.event != null) {
@@ -120,7 +133,10 @@ class NewEventState extends State<NewEvent> {
                         }
                       }
                     },
-                    child: const Text("Submit")),
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(fontSize: 20),
+                    )),
               ],
             )));
   }
