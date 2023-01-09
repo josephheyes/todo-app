@@ -1,3 +1,4 @@
+import 'package:dristle/db_service.dart';
 import 'package:flutter/material.dart';
 
 class Event {
@@ -6,10 +7,11 @@ class Event {
 
   Event({required this.name, required this.category});
 
-  Map<String, dynamic> toMap() {
+  Future<Map<String, dynamic>> toMap() async {
+
     return {
       'name': name,
-      'category': category.name,
+      'category': await getCategoryID(category.name),
     };
   }
 
@@ -24,4 +26,11 @@ class Category {
   IconData icon;
 
   Category(this.name, this.icon);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'icon': icon.codePoint,
+    };
+  }
 }

@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'event.dart';
 
-// TODO: modify code so IconData.codePoint is added to categories table (maybe not necessary
-// if storing category list like below, can just add an ID value to category class)
-// when adding an event to list table, ensure correct category id is linked to it
-// when creating list of events, assign category using id to pull category from category list
-
+// TODO: find out why categories aren't being added to table
 Future<Database>? database;
 
 final List<Category> _categories = [
@@ -36,31 +30,80 @@ void open() async {
   );
 }
 
+Future<int> getCategoryID(String name) async {
+  final db = await database;
+
+  if (db != null) {
+    List<Map> result =
+        await db.rawQuery('SELECT id FROM categories WHERE name=$name');
+
+    return result[0]["id"];
+  } else {
+    throw Exception("Couldn't get category ID");
+  }
+}
+
+Future<Category> getCategoryFromID(int id) async {
+  final db = await database;
+
+  if (db != null) {
+    List<Map> result =
+        await db.rawQuery('SELECT * FROM categories WHERE id=$id');
+
+    return Category(result[0]['name'], IconData(result[0]['icon']));
+  } else {
+    throw Exception("Couldn't get category from ID");
+  }
+}
+
 Future<void> insertEvent(Event event) async {
   final db = await database;
 
   if (db != null) {
     await db.insert(
       'list',
-      event.toMap(),
+      await event.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print(await getEvents());
+    // print(await getEvents());
+  } else {
+    throw Exception("No DB found");
   }
 }
 
-Future<List<Event>> getEvents() async {
+Future<void> updateCategories() async {
+  final db = await database;
+
+  if (db != null) {
+    for (var category in _categories) {
+      await db.insert(
+        'categories',
+        category.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+  }
+}
+
+Future<void> getEvents() async {
   final db = await database;
   if (db != null) {
     final List<Map<String, dynamic>> maps = await db.query('list');
 
-    return List.generate(maps.length, (i) {
-      return Event(
-        name: maps[i]['name'],
-        category: maps[i]['categoryID'],
-      );
-    });
-  } else {
-    return [];
+    for (var event in maps) {
+      print(event[0]['name']);
+    }
+
+    // return Future.wait(List.generate(maps.length, (i) async {
+    //   Category category = await getCategoryFromID(maps[i]['categoryID']);
+    //   return Event(
+    //     name: maps[i]['name'],
+    //     category: category,
+    //   );
+    // }));
+
   }
+  // else {
+  //   return [];
+  // }
 }

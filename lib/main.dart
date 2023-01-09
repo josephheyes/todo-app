@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   db.open();
-  print(await db.getEvents());
+  db.updateCategories();
   runApp(const MyApp());
 }
 
