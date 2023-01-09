@@ -9,13 +9,13 @@ class Event {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'category': category,
+      'category': category.name,
     };
   }
 
   @override
   String toString() {
-    return 'Event{name: $name, category: $category';
+    return 'Event{name: $name, category: $category.name';
   }
 }
 

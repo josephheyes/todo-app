@@ -1,19 +1,13 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'db_service.dart' as db;
 
 void main() async {
-  final listDatabase = openDatabase(
-    join(await getDatabasesPath(), 'list.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        'CREATE TABLE list(id INTEGER PRIMARY KEY, name TEXT, category TEXT)',
-      );
-    },
-    version: 1,
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+
+  db.open();
+  print(await db.getEvents());
   runApp(const MyApp());
 }
 

@@ -48,5 +48,4 @@ class _TodoListState extends State<TodoList> {
           child: const Icon(Icons.add)),
     );
   }
-  
 }
