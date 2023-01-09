@@ -12,6 +12,7 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
+
   Column listColumn = Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: const [],
@@ -47,4 +48,5 @@ class _TodoListState extends State<TodoList> {
           child: const Icon(Icons.add)),
     );
   }
+  
 }

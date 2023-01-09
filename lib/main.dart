@@ -1,8 +1,19 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
-void main() {
+void main() async {
+  final listDatabase = openDatabase(
+    join(await getDatabasesPath(), 'list.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE list(id INTEGER PRIMARY KEY, name TEXT, category TEXT)',
+      );
+    },
+    version: 1,
+  );
   runApp(const MyApp());
 }
 
@@ -14,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      restorationScopeId: "root",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         primarySwatch: Colors.blue,
@@ -85,11 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
               elevation: MaterialStateProperty.all(15),
             ),
             onPressed: () {
-              Navigator.push(
+              Navigator.restorablePush(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => TodoList(),
-                ),
+                _buildRoute,
               );
             },
             child: const Text(
@@ -102,6 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+    );
+  }
+
+  static Route _buildRoute(BuildContext context, Object? params) {
+    return MaterialPageRoute(
+      builder: (context) => TodoList(),
     );
   }
 }

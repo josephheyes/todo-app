@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'event.dart';
 
 class NewEvent extends StatefulWidget {
@@ -30,13 +32,25 @@ class NewEventState extends State<NewEvent> {
     super.dispose();
   }
 
+  Future<void> insertEvent(Event event) async {
+    final db = await openDatabase(
+      join(await getDatabasesPath(), 'list.db'),
+    );
+
+    await db.insert(
+      'list',
+      event.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   Future<void> addEvent(String text, Category category) async {
     setState(() {
       widget.eventList!.add(
         Event(name: text, category: category),
       );
 
-      Navigator.pop(context);
+      Navigator.pop(this.context);
     });
   }
 
@@ -45,7 +59,7 @@ class NewEventState extends State<NewEvent> {
       widget.event!.name = text;
       widget.event!.category = category;
 
-      Navigator.pop(context);
+      Navigator.pop(this.context);
     });
   }
 
