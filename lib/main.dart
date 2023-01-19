@@ -1,10 +1,11 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
 import 'package:flutter/material.dart';
-import 'db_service.dart' as db;
+import 'package:dristle/db_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  DatabaseService db = DatabaseService.instance;
 
   db.open();
   db.updateCategories();

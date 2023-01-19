@@ -1,5 +1,6 @@
 import 'package:dristle/db_service.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Event {
   Category category;
@@ -8,10 +9,11 @@ class Event {
   Event({required this.name, required this.category});
 
   Future<Map<String, dynamic>> toMap() async {
+    DatabaseService db = DatabaseService.instance;
 
     return {
       'name': name,
-      'category': await getCategoryID(category.name),
+      'category': await db.getCategoryID(category.name),
     };
   }
 
@@ -25,7 +27,7 @@ class Category {
   String name;
   IconData icon;
 
-  Category(this.name, this.icon);
+  Category({required this.name, required this.icon});
 
   Map<String, dynamic> toMap() {
     return {
