@@ -13,7 +13,7 @@ class Event {
 
     return {
       'name': name,
-      'category': await db.getCategoryID(category.name),
+      'categoryID': await db.getCategoryID(category.name),
     };
   }
 

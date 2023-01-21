@@ -7,7 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DatabaseService db = DatabaseService.instance;
 
-  db.open();
   db.updateCategories();
   runApp(const MyApp());
 }

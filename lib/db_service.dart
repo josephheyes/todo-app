@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'event.dart';
 
 class DatabaseService {
-
   DatabaseService._privateConstructor();
   static final DatabaseService instance = DatabaseService._privateConstructor();
 
@@ -26,16 +25,15 @@ class DatabaseService {
     return _database!;
   }
 
-
   open() async {
     return await openDatabase(
       join(await getDatabasesPath(), 'list.db'),
-      onCreate: (db, version) {
-        db.execute(
-          'CREATE TABLE list(id INTEGER PRIMARY KEY, name TEXT, categoryID INTEGER)',
+      onCreate: (db, version) async {
+        await db.execute(
+          "CREATE TABLE list(id INTEGER PRIMARY KEY, name TEXT, categoryID INTEGER)",
         );
-        db.execute(
-          'CREATE TABLE categories(id INTEGER PRIMARY KEY, name TEXT, icon INTEGER)',
+        await db.execute(
+          "CREATE TABLE categories(id INTEGER PRIMARY KEY, name TEXT, icon INTEGER)",
         );
       },
       version: 1,
@@ -43,11 +41,11 @@ class DatabaseService {
   }
 
   Future<int> getCategoryID(String name) async {
-    final db = await database;
+    Database db = await instance.database;
 
     if (db != null) {
       List<Map> result =
-          await db.rawQuery('SELECT id FROM categories WHERE name=$name');
+          await db.rawQuery("SELECT id FROM categories WHERE name='$name'");
 
       return result[0]["id"];
     } else {
@@ -56,20 +54,21 @@ class DatabaseService {
   }
 
   Future<Category> getCategoryFromID(int id) async {
-    final db = await database;
+    Database db = await instance.database;
 
     if (db != null) {
       List<Map> result =
-          await db.rawQuery('SELECT * FROM categories WHERE id=$id');
+          await db.rawQuery("SELECT * FROM categories WHERE id=$id");
 
-      return Category(name: result[0]['name'], icon: IconData(result[0]['icon']));
+      return Category(
+          name: result[0]['name'], icon: IconData(result[0]['icon']));
     } else {
       throw Exception("Couldn't get category from ID");
     }
   }
 
   Future<void> insertEvent(Event event) async {
-    final db = await database;
+    Database db = await instance.database;
 
     if (db != null) {
       await db.insert(
@@ -84,20 +83,20 @@ class DatabaseService {
   }
 
   Future<void> updateCategories() async {
-    final db = await database;
+    Database db = await instance.database;
+
     if (db != null) {
       for (Category category in _categories) {
-        await db.insert(
-          'categories',
-          category.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        print(category.toMap());
+        await db.rawInsert(
+            "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})");
       }
     }
   }
 
   Future<void> getEvents() async {
-    final db = await database;
+    Database db = await instance.database;
+
     if (db != null) {
       final List<Map<String, dynamic>> maps = await db.query('list');
 
