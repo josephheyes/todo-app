@@ -1,3 +1,4 @@
+import 'package:dristle/db_service.dart';
 import 'package:flutter/material.dart';
 import 'event.dart';
 
@@ -31,10 +32,16 @@ class NewEventState extends State<NewEvent> {
   }
 
   Future<void> addEvent(String text, Category category) async {
+    DatabaseService db = DatabaseService.instance;
+
     setState(() {
+      Event event = Event(name: text, category: category);
+
       widget.eventList!.add(
-        Event(name: text, category: category),
+        event,
       );
+
+      db.insertEvent(event);
 
       Navigator.pop(context);
     });
@@ -50,12 +57,12 @@ class NewEventState extends State<NewEvent> {
   }
 
   final List<Category> _categories = [
-    Category("Chore", Icons.check),
-    Category("Work", Icons.work),
-    Category("Assignment", Icons.school),
-    Category("Health", Icons.health_and_safety),
-    Category("Exercise", Icons.fitness_center),
-    Category("Social", Icons.group)
+    Category(name: "Chore", icon: Icons.check),
+    Category(name: "Work", icon: Icons.work),
+    Category(name: "Assignment", icon: Icons.school),
+    Category(name: "Health", icon: Icons.health_and_safety),
+    Category(name: "Exercise", icon: Icons.fitness_center),
+    Category(name: "Social", icon: Icons.group)
   ];
 
   Category? _category;

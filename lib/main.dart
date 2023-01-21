@@ -1,8 +1,13 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
 import 'package:flutter/material.dart';
+import 'package:dristle/db_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DatabaseService db = DatabaseService.instance;
+
+  db.updateCategories();
   runApp(const MyApp());
 }
 
@@ -14,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      restorationScopeId: "root",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         primarySwatch: Colors.blue,
@@ -85,11 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
               elevation: MaterialStateProperty.all(15),
             ),
             onPressed: () {
-              Navigator.push(
+              Navigator.restorablePush(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => TodoList(),
-                ),
+                _buildRoute,
               );
             },
             child: const Text(
@@ -102,6 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+    );
+  }
+
+  static Route _buildRoute(BuildContext context, Object? params) {
+    return MaterialPageRoute(
+      builder: (context) => TodoList(),
     );
   }
 }
