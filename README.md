@@ -15,4 +15,4 @@ This app is an attempt to learn Flutter (and app dev in general). The code is ba
 
 
 
-Special thanks to Nathan Burgess for absolutely nothing (except the name).
+Special thanks to Nathan Burgess for the name (and debugging).
