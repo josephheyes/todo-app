@@ -1,16 +1,18 @@
-# dristle
+# Dristle (Placeholder name) - a To-Do List app
 
-A new Flutter project.
+This app is an attempt to learn Flutter (and app dev in general). The code is bad, naturally.
 
-## Getting Started
+## Current Features
 
-This project is a starting point for a Flutter application.
+- Adding events to a list that are saved in a local database
+- Specifying category of events
+- Editing events
 
-A few resources to get you started if this is your first Flutter project:
+## Current Planned Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Adding new categories
+- Saving separate lists
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+Special thanks to Nathan Burgess for absolutely nothing (except the name).
