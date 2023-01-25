@@ -43,78 +43,46 @@ class DatabaseService {
   Future<int> getCategoryID(String name) async {
     Database db = await instance.database;
 
-    if (db != null) {
-      List<Map> result =
-          await db.rawQuery("SELECT id FROM categories WHERE name='$name'");
+    List<Map> result =
+        await db.rawQuery("SELECT id FROM categories WHERE name='$name'");
 
-      return result[0]["id"];
-    } else {
-      throw Exception("Couldn't get category ID");
-    }
+    return result[0]["id"];
   }
 
   Future<Category> getCategoryFromID(int id) async {
     Database db = await instance.database;
 
-    if (db != null) {
-      List<Map> result =
-          await db.rawQuery("SELECT * FROM categories WHERE id=$id");
+    List<Map> result =
+        await db.rawQuery("SELECT * FROM categories WHERE id=$id");
 
-      return Category(
-          name: result[0]['name'], icon: IconData(result[0]['icon']));
-    } else {
-      throw Exception("Couldn't get category from ID");
-    }
+    return Category(name: result[0]['name'], icon: IconData(result[0]['icon']));
   }
 
   Future<void> insertEvent(Event event) async {
     Database db = await instance.database;
 
-    if (db != null) {
-      await db.insert(
-        'list',
-        await event.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      // print(await getEvents());
-    } else {
-      throw Exception("No DB found");
-    }
+    await db.insert(
+      'list',
+      await event.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<void> updateCategories() async {
     Database db = await instance.database;
-
-    if (db != null) {
-      for (Category category in _categories) {
-        print(category.toMap());
-        await db.rawInsert(
-            "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})");
-      }
+    for (Category category in _categories) {
+      await db.rawInsert(
+          "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})");
     }
   }
 
   Future<void> getEvents() async {
     Database db = await instance.database;
 
-    if (db != null) {
-      final List<Map<String, dynamic>> maps = await db.query('list');
+    final List<Map<String, dynamic>> maps = await db.query('list');
 
-      for (var event in maps) {
-        print(event[0]['name']);
-      }
-
-      // return Future.wait(List.generate(maps.length, (i) async {
-      //   Category category = await getCategoryFromID(maps[i]['categoryID']);
-      //   return Event(
-      //     name: maps[i]['name'],
-      //     category: category,
-      //   );
-      // }));
-
+    for (var event in maps) {
+      print(event[0]['name']);
     }
-    // else {
-    //   return [];
-    // }
   }
 }
