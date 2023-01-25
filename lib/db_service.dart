@@ -33,7 +33,7 @@ class DatabaseService {
           "CREATE TABLE list(id INTEGER PRIMARY KEY, name TEXT, categoryID INTEGER)",
         );
         await db.execute(
-          "CREATE TABLE categories(id INTEGER PRIMARY KEY, name TEXT, icon INTEGER)",
+          "CREATE TABLE categories(id INTEGER PRIMARY KEY, name TEXT type UNIQUE, icon INTEGER)",
         );
       },
       version: 1,
@@ -52,10 +52,11 @@ class DatabaseService {
   Future<Category> getCategoryFromID(int id) async {
     Database db = await instance.database;
 
-    List<Map> result =
+    List<Map<String, dynamic>> result =
         await db.rawQuery("SELECT * FROM categories WHERE id=$id");
 
-    return Category(name: result[0]['name'], icon: IconData(result[0]['icon']));
+    print(result[0]);
+    return categoryFromMap(result[0]);
   }
 
   Future<void> insertEvent(Event event) async {
@@ -71,18 +72,25 @@ class DatabaseService {
   Future<void> updateCategories() async {
     Database db = await instance.database;
     for (Category category in _categories) {
-      await db.rawInsert(
-          "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})");
+      // await db.rawInsert(
+      //   "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})",
+      // );
+      await db.insert('categories', category.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore);
     }
   }
 
-  Future<void> getEvents() async {
-    Database db = await instance.database;
+  Future<Event> eventFromMap(Map<String, dynamic> map) async {
+    return Event(
+      name: map['name'],
+      category: await getCategoryFromID(map['categoryID']),
+    );
+  }
 
-    final List<Map<String, dynamic>> maps = await db.query('list');
-
-    for (var event in maps) {
-      print(event[0]['name']);
-    }
+  Category categoryFromMap(Map<String, dynamic> map) {
+    return Category(
+      name: map['name'],
+      icon: IconData(map['icon'], fontFamily: "MaterialIcons"),
+    );
   }
 }

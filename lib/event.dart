@@ -1,6 +1,5 @@
 import 'package:dristle/db_service.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
 class Event {
   Category category;

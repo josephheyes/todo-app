@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'db_service.dart';
 import 'event.dart';
 import 'list_card.dart';
 import 'manage_event.dart';
@@ -12,11 +14,28 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-
   Column listColumn = Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: const [],
   );
+
+  @override
+  void initState() {
+    super.initState();
+    getEvents(widget.eventList);
+  }
+
+  Future<void> getEvents(List<Event> eventList) async {
+    DatabaseService service = DatabaseService.instance;
+    Database db = await service.database;
+    final List<Map<String, dynamic>> maps = await db.query('list');
+
+    for (var record in maps) {
+      Event event = await service.eventFromMap(record);
+      eventList.add(event);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {

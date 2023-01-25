@@ -37,12 +37,9 @@ class NewEventState extends State<NewEvent> {
     setState(() {
       Event event = Event(name: text, category: category);
 
-      widget.eventList!.add(
-        event,
-      );
-
       db.insertEvent(event);
 
+      // db.getEvents(widget.eventList!);
       Navigator.pop(context);
     });
   }
