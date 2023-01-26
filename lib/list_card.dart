@@ -15,12 +15,12 @@ class _ListCardState extends State<ListCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.inversePrimary,
+      color: Theme.of(context).colorScheme.secondaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: ListTile(
           leading: Icon(widget.event.category.icon,
-              color: Theme.of(context).colorScheme.secondary),
+              color: Theme.of(context).colorScheme.primary),
           title: Text(widget.event.name),
           trailing: IconButton(
             icon: const Icon(Icons.arrow_forward_rounded),

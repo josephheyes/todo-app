@@ -69,81 +69,83 @@ class NewEventState extends State<NewEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.surface,
+      ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: textController,
+              decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20),
+                  border: UnderlineInputBorder(),
+                  labelText: "Event name",
+                  labelStyle: TextStyle(color: Colors.black)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            DropdownButtonFormField(
+              items: _categories.map((Category category) {
+                return DropdownMenuItem(
+                    value: category,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(category.name),
+                        Icon(category.icon),
+                      ],
+                    ));
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() => _category = newValue);
+              },
+              value: _category,
+              decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20),
+                  border: UnderlineInputBorder(),
+                  labelText: "Event type",
+                  labelStyle: TextStyle(color: Colors.black)),
+              validator: (value) {
+                if (value == null) {
+                  return 'Please enter a category';
+                }
+                return null;
+              },
+            ),
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.inversePrimary),
+                  foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.inverseSurface),
+                  padding: MaterialStateProperty.all(
+                      const EdgeInsets.fromLTRB(42, 0, 42, 0)),
+                  elevation: MaterialStateProperty.all(5),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    if (widget.eventList == null && widget.event != null) {
+                      editEvent(textController.text, _category!);
+                    } else {
+                      addEvent(textController.text, _category!);
+                    }
+                  }
+                },
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(fontSize: 20),
+                )),
+          ],
         ),
-        body: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: textController,
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(20),
-                      border: UnderlineInputBorder(),
-                      labelText: "Event name",
-                      labelStyle: TextStyle(color: Colors.black)),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                DropdownButtonFormField(
-                  items: _categories.map((Category category) {
-                    return DropdownMenuItem(
-                        value: category,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(category.name),
-                            Icon(category.icon),
-                          ],
-                        ));
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() => _category = newValue);
-                  },
-                  value: _category,
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(20),
-                      border: UnderlineInputBorder(),
-                      labelText: "Event type",
-                      labelStyle: TextStyle(color: Colors.black)),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please enter a category';
-                    }
-                    return null;
-                  },
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.inversePrimary),
-                      foregroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.inverseSurface),
-                      padding: MaterialStateProperty.all(
-                          const EdgeInsets.fromLTRB(42, 0, 42, 0)),
-                      elevation: MaterialStateProperty.all(5),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (widget.eventList == null && widget.event != null) {
-                          editEvent(textController.text, _category!);
-                        } else {
-                          addEvent(textController.text, _category!);
-                        }
-                      }
-                    },
-                    child: const Text(
-                      "Submit",
-                      style: TextStyle(fontSize: 20),
-                    )),
-              ],
-            )));
+      ),
+    );
   }
 }
