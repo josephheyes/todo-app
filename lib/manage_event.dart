@@ -37,10 +37,6 @@ class NewEventState extends State<NewEvent> {
     setState(() {
       Event event = Event(name: text, category: category);
 
-      widget.eventList!.add(
-        event,
-      );
-
       db.insertEvent(event);
 
       Navigator.pop(context);
@@ -48,9 +44,12 @@ class NewEventState extends State<NewEvent> {
   }
 
   Future<void> editEvent(String text, Category category) async {
+    DatabaseService db = DatabaseService.instance;
     setState(() {
-      widget.event!.name = text;
-      widget.event!.category = category;
+      // widget.event!.name = text;
+      // widget.event!.category = category;
+
+      db.updateEvent(widget.event!.id!, text, category);
 
       Navigator.pop(context);
     });
