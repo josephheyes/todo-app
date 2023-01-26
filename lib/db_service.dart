@@ -69,12 +69,18 @@ class DatabaseService {
     );
   }
 
+  Future<void> updateEvent(int id, String name, Category category) async {
+    Database db = await instance.database;
+
+    Event updatedEvent = Event(name: name, category: category);
+    Map<String, dynamic> updatedRow = await updatedEvent.toMap();
+
+    db.update('list', updatedRow, where: 'id = ?', whereArgs: [id]);
+  }
+
   Future<void> updateCategories() async {
     Database db = await instance.database;
     for (Category category in _categories) {
-      // await db.rawInsert(
-      //   "INSERT INTO categories (name, icon) VALUES ('${category.name}', ${category.icon.codePoint})",
-      // );
       await db.insert('categories', category.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
     }
@@ -82,6 +88,7 @@ class DatabaseService {
 
   Future<Event> eventFromMap(Map<String, dynamic> map) async {
     return Event(
+      id: map['id'],
       name: map['name'],
       category: await getCategoryFromID(map['categoryID']),
     );

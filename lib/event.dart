@@ -2,10 +2,11 @@ import 'package:dristle/db_service.dart';
 import 'package:flutter/material.dart';
 
 class Event {
+  int? id;
   Category category;
   String name;
 
-  Event({required this.name, required this.category});
+  Event({this.id, required this.name, required this.category});
 
   Future<Map<String, dynamic>> toMap() async {
     DatabaseService db = DatabaseService.instance;

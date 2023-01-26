@@ -30,11 +30,17 @@ class _TodoListState extends State<TodoList> {
     Database db = await service.database;
     final List<Map<String, dynamic>> maps = await db.query('list');
 
+    eventList.clear();
     for (var record in maps) {
       Event event = await service.eventFromMap(record);
       eventList.add(event);
     }
+    print(eventList);
     setState(() {});
+  }
+
+  Future<void> _pullRefresh() async {
+    getEvents(widget.eventList);
   }
 
   @override
@@ -45,23 +51,26 @@ class _TodoListState extends State<TodoList> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.surface,
       ),
-      body: ListView.builder(
-        itemCount: widget.eventList.length,
-        itemBuilder: (context, index) {
-          return ListCard(
-            event: widget.eventList[index],
-          );
-        },
-      ),
+      body: RefreshIndicator(
+          onRefresh: _pullRefresh,
+          child: ListView.builder(
+            itemCount: widget.eventList.length,
+            itemBuilder: (context, index) {
+              return ListCard(
+                event: widget.eventList[index],
+              );
+            },
+          )),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NewEvent(eventList: widget.eventList),
-              ),
-            );
+            await Navigator.of(context)
+                .push(MaterialPageRoute(
+              builder: (context) => NewEvent(eventList: widget.eventList),
+            ))
+                .then((context) {
+              getEvents(widget.eventList);
+            });
             setState(() {});
           },
           child: const Icon(Icons.add)),
