@@ -2,6 +2,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:dristle/list.dart';
 import 'package:flutter/material.dart';
 import 'package:dristle/db_service.dart';
+import 'package:dristle/manage_categories.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(10),
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: (MediaQuery.of(context).size.height) * 0.8,
+              height: (MediaQuery.of(context).size.height) * 0.9,
               child: Card(
                 color: Theme.of(context).colorScheme.primary,
                 elevation: 15,
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     BorderedText(
                       strokeColor: Colors.black,
                       child: Text(
-                        "Dristle",
+                        "planito",
                         style: TextStyle(
                             fontSize: 100,
                             color: Theme.of(context).colorScheme.surface,
@@ -68,39 +69,63 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     Text(
-                      "A To-Do List App",
+                      "Start small!",
                       style: TextStyle(
                         fontSize: 40,
                         color: Theme.of(context).colorScheme.surface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.inversePrimary),
+                        foregroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.inverseSurface),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.fromLTRB(20, 0, 20, 0)),
+                      ),
+                      onPressed: () {
+                        Navigator.restorablePush(
+                          context,
+                          _listRoute,
+                        );
+                      },
+                      child: const Text(
+                        "View my tasks",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.inversePrimary),
+                        foregroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.inverseSurface),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.fromLTRB(20, 0, 20, 0)),
+                      ),
+                      onPressed: () {
+                        Navigator.restorablePush(
+                          context,
+                          _newCategoryRoute,
+                        );
+                      },
+                      child: const Text(
+                        "Add categories",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.inversePrimary),
-              foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.inverseSurface),
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.fromLTRB(20, 0, 20, 0)),
-              elevation: MaterialStateProperty.all(15),
-            ),
-            onPressed: () {
-              Navigator.restorablePush(
-                context,
-                _buildRoute,
-              );
-            },
-            child: const Text(
-              "Start planning!",
-              style: TextStyle(
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -109,9 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  static Route _buildRoute(BuildContext context, Object? params) {
+  static Route _listRoute(BuildContext context, Object? params) {
     return MaterialPageRoute(
       builder: (context) => TodoList(),
+    );
+  }
+
+  static Route _newCategoryRoute(BuildContext context, Object? params) {
+    return MaterialPageRoute(
+      builder: (context) => const CategoryManager(),
     );
   }
 }

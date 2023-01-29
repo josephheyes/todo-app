@@ -55,7 +55,6 @@ class DatabaseService {
     List<Map<String, dynamic>> result =
         await db.rawQuery("SELECT * FROM categories WHERE id=$id");
 
-    print(result[0]);
     return categoryFromMap(result[0]);
   }
 

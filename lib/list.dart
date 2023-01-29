@@ -35,7 +35,6 @@ class _TodoListState extends State<TodoList> {
       Event event = await service.eventFromMap(record);
       eventList.add(event);
     }
-    print(eventList);
     setState(() {});
   }
 
